@@ -2,6 +2,7 @@ import pygame
 import random
 from os import path
 
+pygame.init()
 
 img_dir = path.join(path.dirname(__file__), 'img')
 # File path with all the enemy images
@@ -455,15 +456,15 @@ for i in range (8):
     img_sm = pygame.transform.scale(img, (32, 32)) #EXPLOSION
     explosions['sm'].append(img_sm)
 
-# Load all game sounds 
+# Load all game sounds
 shoot_sound = pygame.mixer.Sound(path.join(snd_dir, 'Laser_Shoot.wav'))
 expl_sound = []
 for snd in ['expl1.wav', 'expl2.wav']:
     expl_sound.append(pygame.mixer.Sound(path.join(snd_dir, snd)))
 def main_music():
-    pygame.mixer.music.stop() 
+    pygame.mixer.music.stop()
     pygame.mixer.music.load(path.join(snd_dir, 'Lunar Harvest v1_0.mp3'))
-    pygame.mixer.music.play() 
+    pygame.mixer.music.play()
 def boss_battle():
     pygame.mixer.music.stop()
     pygame.mixer.music.load(path.join(snd_dir, 'powerrangers.mp3'))
@@ -602,12 +603,12 @@ while running:
                 congratulations = True
 
 
-    # * Update 
+    # * Update
     all_sprites.update()
 
     if progress >= 100: #BOSS SPAWN UPDATE / RITA SPAWN UPDATE
         rita_group.update()
-        if not music_on: 
+        if not music_on:
             boss_battle()
             music_on = True
 
@@ -620,11 +621,11 @@ while running:
         progress += 3
         random.choice(expl_sound).play()
         # ! EXPLOSIONS HIT
-        expl = Explosion(hit.rect.center, 'lg')  
+        expl = Explosion(hit.rect.center, 'lg')
         all_sprites.add(expl)
 
     #! BOSS HIT
-    # check to see if a bullet hit a boss 
+    # check to see if a bullet hit a boss
     hits = pygame.sprite.groupcollide(
         rita_group, bullets, True, pygame.sprite.collide_circle)
     for hit in hits:
@@ -632,7 +633,7 @@ while running:
         expl2 = Explosion(hit.rect.center, 'xl')
         random.choice(expl_sound).play()
         all_sprites.add(expl2)
-        
+
     def boom():
         expl = Explosion(hit.rect.center, 'sm')
         random.choice(expl_sound).play()
@@ -674,33 +675,33 @@ while running:
     for hit in hits:
         player2.shield -= hit.radius * 2
         if player2.shield <= 0:
-            player2.kill() 
-    
+            player2.kill()
+
     if player.shield <= 0 and player2.shield <= 0:
         # Reset the game progress when both players die
         progress = 0
         score = 0
         main_music()
         game_over = True
- 
+
     #! DEATH OF RITA
     def wait():
         pygame.time.wait(50)
         congratulations = True
         return congratulations
     if rita.shield <= 0:
-        wait()       
+        wait()
         rita.kill()
 
 
-        
+
     # check to see if an enemy bullet hit the players
     #! MOB BULLET HIT PLAYER 1
     hits = pygame.sprite.spritecollide(
         player, enemy_bullets, True, pygame.sprite.collide_circle)
     for hit in hits:
         player.shield -= 10 #PLAYER 1 HEALTH
-        boom()#! EXPLOSION 
+        boom()#! EXPLOSION
         if player.shield <= 0:
             player.kill()
 
@@ -709,7 +710,7 @@ while running:
         player2, enemy_bullets, True, pygame.sprite.collide_circle)
     for hit in hits:
         player2.shield -= 10 #PLAYER 2 HEALTH
-        boom() #! EXPLOSION 
+        boom() #! EXPLOSION
         if player2.shield <= 0:
             player2.kill()
 
